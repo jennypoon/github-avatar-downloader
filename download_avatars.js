@@ -29,6 +29,25 @@ function getAvatar(element) {
   });
 }
 
+function downloadImageByURL(url, filePath) {
+
+request.get(url)
+       .on('error', function (err) {
+         throw err;
+         console.log("ERROR!")
+       })
+       .on('response', function (response) {
+         console.log('Downloading!')
+         console.log('Response Message: ', response.statusMessage)
+         console.log('Content Type: ', response.headers['content-type'])
+       })
+       .on('end', function () {
+          console.log("Download Complete!")
+       })
+       .pipe(fs.createWriteStream("./" + filePath))
+
+};
+
 getRepoContributors("jquery", "jquery", function(err, result) {
   console.log("Errors:", err);
   console.log("Result:", result);
