@@ -1,5 +1,6 @@
 var request = require('request');
 var secrets = require('./secrets.js')
+var fs = require('fs');
 
 
 function getRepoContributors(repoOwner, repoName, cb) {
@@ -24,10 +25,11 @@ function getRepoContributors(repoOwner, repoName, cb) {
 }
 
 function getAvatar(element) {
-  return element.map(function(value) {
-    return value.avatar_url;
+  return element.forEach(function(value) {
+    downloadImageByURL(value.avatar_url, "avatars/" + value.login + ".jpg")
   });
 }
+
 
 function downloadImageByURL(url, filePath) {
 
@@ -44,7 +46,7 @@ request.get(url)
        .on('end', function () {
           console.log("Download Complete!")
        })
-       .pipe(fs.createWriteStream("./" + filePath))
+       .pipe(fs.createWriteStream(filePath))
 
 };
 
