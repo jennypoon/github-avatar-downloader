@@ -4,29 +4,30 @@ var fs = require('fs');
 var owner = process.argv[2];
 var repo = process.argv[3];
 
+if (!(process.argv[2] && process.argv[3])){
+  console.log("Missing Parameter - Enter repoOwner, repoName");
+  return;
+}
+
 function getRepoContributors(repoOwner, repoName, cb) {
-  if (repoOwner instanceof String && repoName instanceof String) {
-    var options = {
-      url: "https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contributors",
-      headers: {
-        'User-Agent': 'request',
-        'Authorization': 'token ' + secrets.GITHUB_TOKEN
-      }
-    };
-
-    request(options, function(err, res, body) {
-      if (err) {
-        console.error("Error :", err)
-
-      }
-      else {
-        var allData = JSON.parse(body);
-        cb(null, getAvatar(allData));
-      }
-    });
-  } else {
-    console.log("Error: Missing Parameters");
+  var options = {
+    url: "https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contributors",
+    headers: {
+      'User-Agent': 'request',
+      'Authorization': 'token ' + secrets.GITHUB_TOKEN
+    }
   };
+
+  request(options, function(err, res, body) {
+    if (err) {
+      console.error("Error :", err)
+
+    }
+    else {
+      var allData = JSON.parse(body);
+      cb(null, getAvatar(allData));
+    }
+  });
 }
 
 function getAvatar(element) {
