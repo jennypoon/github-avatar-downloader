@@ -12,7 +12,14 @@ function getRepoContributors(repoOwner, repoName, cb) {
   };
 
   request(options, function(err, res, body) {
-    cb(err, body);
+    if (err) {
+      console.error("Error :", err)
+      return false;
+    }
+    else {
+    var allData = JSON.parse(body);
+      console.log(allData);
+    }
   });
 }
 
