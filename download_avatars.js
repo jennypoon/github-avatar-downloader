@@ -5,24 +5,28 @@ var owner = process.argv[2];
 var repo = process.argv[3];
 
 function getRepoContributors(repoOwner, repoName, cb) {
-  var options = {
-    url: "https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contributors",
-    headers: {
-      'User-Agent': 'request',
-      'Authorization': 'token ' + secrets.GITHUB_TOKEN
-    }
+  if (repoOwner instanceof String && repoName instanceof String) {
+    var options = {
+      url: "https://api.github.com/repos/" + repoOwner + "/" + repoName + "/contributors",
+      headers: {
+        'User-Agent': 'request',
+        'Authorization': 'token ' + secrets.GITHUB_TOKEN
+      }
+    };
+
+    request(options, function(err, res, body) {
+      if (err) {
+        console.error("Error :", err)
+
+      }
+      else {
+        var allData = JSON.parse(body);
+        cb(null, getAvatar(allData));
+      }
+    });
+  } else {
+    console.log("Error: Missing Parameters");
   };
-
-  request(options, function(err, res, body) {
-    if (err) {
-      console.error("Error :", err)
-
-    }
-    else {
-      var allData = JSON.parse(body);
-      cb(null, getAvatar(allData));
-    }
-  });
 }
 
 function getAvatar(element) {
