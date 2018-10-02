@@ -1,7 +1,8 @@
 var request = require('request');
 var secrets = require('./secrets.js')
 var fs = require('fs');
-
+var owner = process.argv[2];
+var repo = process.argv[3];
 
 function getRepoContributors(repoOwner, repoName, cb) {
   var options = {
@@ -50,7 +51,7 @@ request.get(url)
 
 };
 
-getRepoContributors("jquery", "jquery", function(err, result) {
+getRepoContributors(owner, repo, function(err, result) {
   console.log("Errors:", err);
   console.log("Result:", result);
 });
